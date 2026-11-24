@@ -3,7 +3,7 @@
 > Diperbarui oleh Cline di akhir setiap task. Baca file ini di awal setiap task.
 
 ## Status saat ini
-- **Fase:** Persiapan. Belum ada kode aplikasi.
+- **Fase:** Fase 0 (setup). T-001 selesai: Next.js 16.4.6 + TypeScript strict + Tailwind v4 + ESLint + Vitest, `src/lib/env.ts` + `tests/env.test.ts`.
 - **Ronde:** Semifinal. Skor abstrak 61/100: P1 Problem Clarity 1/5, P3 Value and Originality 3/5. Juri menolak survei 35 responden karena berlabel "fictional context".
 - **Prioritas #1 (tanpa kode):** Fase V di `docs/02-PROJECT_PLAN.md` (V-001 s.d. V-006), panduan di `docs/10-EVIDENCE_PLAN.md`. Jangan pakai angka 28/35 di dokumen mana pun.
 - **Prioritas #2:** T-001 s.d. T-005 (Fase 0). Mulai dengan Prompt 0 di `docs/08-CLINE_PROMPTS.md`.
@@ -18,6 +18,12 @@
 ## Catatan / utang teknis
 - Migrasi `0001_init.sql` belum pernah dijalankan; verifikasi di T-002 dan T-016.
 - Trigger `enforce_email_domain` masih dikomentari (aktifkan setelah domain terisi dan domain demo ditambahkan).
+- T-001: tombol di `/` mengarah ke `/login` yang baru dibuat di T-003, jadi masih 404 sampai task itu selesai.
+- T-001: Tailwind v4 memakai `@tailwindcss/turbopack` lewat `next.config.ts` (tanpa `postcss.config.mjs`), mengikuti output resmi create-next-app.
+- T-001: `vitest.config.mts` (bukan `.ts`) karena `package.json` tidak memakai `"type": "module"`.
+- T-001: `@types/node` dinaikkan ke `^22` agar cocok dengan peer dependency Vitest 5 (Node runtime v22).
+- T-001: `src/app/layout.tsx` memakai tipe props eksplisit (`ReactNode`), bukan `LayoutProps<"/">`, agar `npm run typecheck` lulus tanpa perlu `next build` lebih dulu.
+- Lingkungan Cline di mesin ini: Node/npm host hanya terlihat lewat `/run/host`; helper `~/.var/app/com.visualstudio.code/data/studysync-env.sh` menyiapkan `PATH` + `LD_LIBRARY_PATH` untuk sandbox VS Code Flatpak. Di terminal biasa cukup `node`/`npm` biasa.
 
 ## Hambatan
 - (kosong)

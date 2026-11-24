@@ -14,7 +14,7 @@
 - [ ] V-006 Tes baseline grup chat vs StudySync
 
 ## Fase 0: Setup
-- [ ] T-001 Scaffold
+- [x] T-001 Scaffold
 - [ ] T-002 Supabase dev + migrasi + seed
 - [ ] T-003 Auth email OTP
 - [ ] T-004 App shell
