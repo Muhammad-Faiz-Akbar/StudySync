@@ -16,7 +16,9 @@
 - Rubrik: P1 Problem Clarity 30%, P2 Fit to Case 20%, P3 Value & Originality 25%, P4 Feasibility 15%, P5 Abstract Clarity 10% (skor 1–5 per kriteria). Deliverable dan deadline Semifinal: [isi dari halaman Timeline & Deadline]
 
 ## Catatan / utang teknis
-- Migrasi `0001_init.sql` belum pernah dijalankan; verifikasi di T-002 dan T-016.
+- Migrasi `0001_init.sql` + `0002_harden_rls.sql` sudah direview tetapi **belum dijalankan**; menunggu eksekusi manual di project Supabase dev, lalu verifikasi di T-002 dan T-016.
+- `0002` menutup 6 temuan review 0001: view `public_profiles` tanpa `security_invoker`, insert peserta sesi privat, kolom koneksi yang bisa di-hijack, `display_name` dari email, sesi terbuka yang sudah dibatalkan tetap terbaca, index/FK/block pada `get_contact`.
+- Terbuka: `meeting_url` sesi terbuka masih terbaca semua user login; saring lewat view khusus saat T-030.
 - Trigger `enforce_email_domain` masih dikomentari (aktifkan setelah domain terisi dan domain demo ditambahkan).
 - T-001: tombol di `/` mengarah ke `/login` yang baru dibuat di T-003, jadi masih 404 sampai task itu selesai.
 - T-001: Tailwind v4 memakai `@tailwindcss/turbopack` lewat `next.config.ts` (tanpa `postcss.config.mjs`), mengikuti output resmi create-next-app.
