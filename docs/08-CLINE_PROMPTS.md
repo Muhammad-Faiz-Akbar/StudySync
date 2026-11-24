@@ -25,6 +25,9 @@ Jangan menulis atau mengubah file apa pun dulu. Tunggu persetujuanku.
 Kerjakan T-001 sesuai docs/02-PROJECT_PLAN.md dan .clinerules/01.
 Scaffold Next.js (App Router, TypeScript strict, Tailwind, ESLint, src/ dir, alias @/*), tambah Vitest,
 script npm: dev, build, lint, typecheck, test, serta src/lib/env.ts (validasi zod, baca ALLOWED_EMAIL_DOMAINS, APP_TIMEZONE, dst. dari .env.example).
+tulis tests/env.test.ts untuk parseEnv (valid, kunci hilang, domain kosong, DEMO_MODE bukan boolean).
+Catatan lingkungan: pengembang memakai Linux (CachyOS/Arch) dengan bash; tulis perintah verifikasi
+dengan bash/POSIX, bukan PowerShell atau perintah khusus Windows.
 PENTING: jangan menimpa file yang sudah ada (README.md, .clinerules/, docs/, memory-bank/, supabase/, .env.example).
 Jika create-next-app menolak karena folder tidak kosong, scaffold di folder sementara lalu salin tanpa menimpa.
 Pastikan .gitignore memuat .env*. Setelah selesai, perbarui memory-bank dan laporkan sesuai format di .clinerules/04.
