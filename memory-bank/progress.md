@@ -15,7 +15,7 @@
 
 ## Fase 0: Setup
 - [x] T-001 Scaffold
-- [ ] T-002 Supabase dev + migrasi + seed
+- [x] T-002 Supabase dev + migrasi + seed
 - [ ] T-003 Auth email OTP
 - [ ] T-004 App shell
 - [ ] T-005 CI + deploy preview

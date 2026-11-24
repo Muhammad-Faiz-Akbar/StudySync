@@ -66,7 +66,7 @@ Contoh query M1 (median detik) dan M2 diletakkan di `docs/06-TESTING_AND_VALIDAT
 - Kapasitas sesi dan validitas bergabung ke sesi terbuka dicek di route handler (bukan di RLS). Tambahkan test.
 - Status koneksi hanya bisa berubah sesuai policy: penerima → `accepted`/`declined`; peminta → `cancelled`. `responded_at` diisi aplikasi.
 - Trigger domain email (`enforce_email_domain`) dikomentari di migrasi; aktifkan setelah daftar domain terisi.
-- Migrasi belum pernah dijalankan. T-002 dan T-016 memverifikasinya (termasuk uji bahwa user A tidak bisa membaca `availability_slots` user B).
+- Migrasi `0001_init.sql` + `0002_harden_rls.sql` + `seed.sql` sudah dijalankan di project Supabase **dev** (T-002, tanpa error). Cek cepat skema: jalankan `supabase/verify_schema.sql` di SQL Editor; uji lintas-user (user A tidak bisa membaca data user B) tetap di T-016.
 
 ## 6. Hardening `0002_harden_rls.sql` (T-002)
 Dijalankan setelah `0001_init.sql`.
