@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { parseEnv } from "@/lib/env";
+import { parseEnv, parsePublicEnv } from "@/lib/env";
 
 const validSource = {
   NEXT_PUBLIC_SUPABASE_URL: "https://demo-project.supabase.co",
@@ -41,5 +41,32 @@ describe("parseEnv", () => {
 
   it("throws when DEMO_MODE is not a boolean flag", () => {
     expect(() => parseEnv({ ...validSource, DEMO_MODE: "yes" })).toThrow(/DEMO_MODE/);
+  });
+});
+
+describe("parsePublicEnv", () => {
+  it("keeps only the browser-safe variables", () => {
+    const env = parsePublicEnv(validSource);
+
+    expect(env).toEqual({
+      NEXT_PUBLIC_SUPABASE_URL: "https://demo-project.supabase.co",
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: "anon-key",
+    });
+    expect(env).not.toHaveProperty("SUPABASE_SERVICE_ROLE_KEY");
+  });
+
+  it("throws when the public URL is missing", () => {
+    expect(() => parsePublicEnv({ NEXT_PUBLIC_SUPABASE_ANON_KEY: "anon-key" })).toThrow(
+      /NEXT_PUBLIC_SUPABASE_URL/,
+    );
+  });
+
+  it("throws when the anon key is empty", () => {
+    expect(() =>
+      parsePublicEnv({
+        NEXT_PUBLIC_SUPABASE_URL: "https://demo-project.supabase.co",
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: "",
+      }),
+    ).toThrow(/NEXT_PUBLIC_SUPABASE_ANON_KEY/);
   });
 });

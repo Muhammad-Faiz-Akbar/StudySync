@@ -104,3 +104,64 @@ export function getEnv(): AppEnv {
   }
   return cachedEnv;
 }
+
+/** Subset of the configuration that is safe to ship to the browser. */
+const publicEnvSchema = z.object({
+  NEXT_PUBLIC_SUPABASE_URL: httpUrl,
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1, "must not be empty"),
+});
+
+export type PublicEnv = z.infer<typeof publicEnvSchema>;
+
+/** Pure parser for the browser-safe variables, so it can be unit tested. */
+export function parsePublicEnv(source: Record<string, string | undefined>): PublicEnv {
+  const parsed = publicEnvSchema.safeParse(source);
+
+  if (!parsed.success) {
+    const details = parsed.error.issues
+      .map((issue) => `${issue.path.join(".") || "env"}: ${issue.message}`)
+      .join("; ");
+    throw new Error(`Invalid public environment variables -> ${details}`);
+  }
+
+  return parsed.data;
+}
+
+let cachedPublicEnv: PublicEnv | undefined;
+
+/**
+ * Browser-safe configuration. The variables are read with literal
+ * `process.env.NEXT_PUBLIC_*` access so Next.js can inline them into client bundles.
+ */
+export function getPublicEnv(): PublicEnv {
+  if (!cachedPublicEnv) {
+    cachedPublicEnv = parsePublicEnv({
+      NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    });
+  }
+  return cachedPublicEnv;
+}
+
+/** Configuration needed by the login flow only (no service role key involved). */
+
+const allowedDomainsEnvSchema = z.object({ ALLOWED_EMAIL_DOMAINS: domainList });
+
+/** Pure parser for the campus domain allowlist. */
+export function parseAllowedEmailDomains(source: Record<string, string | undefined>): string[] {
+  const parsed = allowedDomainsEnvSchema.safeParse(source);
+
+  if (!parsed.success) {
+    const details = parsed.error.issues
+      .map((issue) => `${issue.path.join(".") || "env"}: ${issue.message}`)
+      .join("; ");
+    throw new Error(`Invalid ALLOWED_EMAIL_DOMAINS -> ${details}`);
+  }
+
+  return parsed.data.ALLOWED_EMAIL_DOMAINS;
+}
+
+/** Campus domains allowed to sign in, read from the validated environment. */
+export function getAllowedEmailDomains(): string[] {
+  return parseAllowedEmailDomains({ ALLOWED_EMAIL_DOMAINS: process.env.ALLOWED_EMAIL_DOMAINS });
+}

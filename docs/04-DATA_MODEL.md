@@ -29,7 +29,8 @@ Prinsip: **data lintas-user tidak pernah dibaca client langsung.** Client hanya 
 | `user_courses` | Ya | Tidak langsung | Mata kuliah bersama di DTO |
 | `connections` | Sebagai peminta/penerima | Tidak | — |
 | `study_sessions` | Sebagai host/peserta | Jika `is_open` | Query langsung (RLS) |
-| `events`, `reports`, `allowed_email_domains` | Tulis saja | Tidak | Query via service role / SQL editor |
+| `events` | Tulis + baca milik sendiri (migrasi `0003`) | Tidak | Query via service role / SQL editor |
+| `reports`, `allowed_email_domains` | Tulis saja | Tidak | Query via service role / SQL editor |
 
 ## 3. DTO utama (`GET /api/matches`)
 ```ts
@@ -79,3 +80,9 @@ Dijalankan setelah `0001_init.sql`.
 - `get_contact()` menolak bila ada `user_blocks` di salah satu arah dan mengembalikan baris hanya jika `contact_value` terisi.
 - `handle_new_user` tidak lagi memakai local-part email sebagai `display_name` (menghindari PII/NIM tampil di profil publik).
 - Catatan terbuka: `meeting_url` pada sesi terbuka masih terbaca semua user login; saring lewat view khusus saat T-030 (Open Study Board).
+
+## 7. `0003_events_self_read.sql` (T-003)
+- Menambah policy `events_select_own` (`using (user_id = auth.uid())`) agar login bisa menghitung `is_first_login` tanpa memakai service role.
+- Efek samping: client kini bisa membaca baris `events` miliknya sendiri. `props` tidak boleh berisi PII.
+- Perlu dijalankan manual di project Supabase dev sebelum alur login diuji.
+
